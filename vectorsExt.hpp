@@ -12,7 +12,7 @@
 *                                                                                *
  *********************************************************************************/
 
-void validateMatrix(const std::vector<std::vector<double>> matrixA)
+void validateMatrix(const std::vector<std::vector<double>>& matrixA)
 {
 
     if(matrixA.empty())
@@ -52,7 +52,7 @@ void validateMatrix(const std::vector<std::vector<double>> matrixA)
 }
 
 
-void validateVector(std::vector<double> vectorA)
+void validateVector(std::vector<double>& vectorA)
 {
     if(vectorA.empty())
     {
