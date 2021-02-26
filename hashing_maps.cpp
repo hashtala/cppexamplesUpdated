@@ -12,7 +12,7 @@ class HashedTable
 
     HashedTable()
     {
-        hashTable = (int*)malloc(hashSize*sizeof(int)); //allocates memmory for 20*4 bytes. 
+        hashTable = new int[hashSize]; 
     }
 
     int hashKey(int key)
@@ -40,7 +40,7 @@ class HashedTable
 
     void destroyTable()
     {
-        free(hashTable);
+        delete[] hashTable;
     }
 };
 
@@ -55,5 +55,5 @@ int main()
     table.addItem(452,5);
 
    
-    return 1;
+    return 0;
 }
