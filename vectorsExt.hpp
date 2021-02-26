@@ -4,16 +4,6 @@
 #include<string>
 #include<stdexcept>
 
-/***********************************************************************
-* -- Will be used to determine concatenation Type                      *
-* -- if Rows is selected, rows of matrices will be concatenatad        *
-* -- if Columns is selected, columns of matrices will be concatenated  *
-************************************************************************/
-
-enum class ConcatenationType {
-	Rows,
-	Columns,
-};
 
 /*********************************************************************************
 *                                                                                *
@@ -75,7 +65,16 @@ void validateVector(std::vector<double>& vectorA)
 }
 
 
+/***********************************************************************
+* -- Will be used to determine concatenation Type                      *
+* -- if Rows is selected, rows of matrices will be concatenatad        *
+* -- if Columns is selected, columns of matrices will be concatenated  *
+************************************************************************/
 
+enum class ConcatenationType {
+	Rows,
+	Columns,
+};
 
 
 /*******************************************************
@@ -178,8 +177,8 @@ double matrixSum(const std::vector<std::vector<double>> &matrixA)
 }
 
 /**************************************************************************
-*-- This convolution function MODIFIES input buffer                       *
-*-- Writes convolved signal right into input buffer                       *
+* -- This convolution function MODIFIES input buffer                      *
+* -- Writes convolved signal right into input buffer                      *
 ***************************************************************************/
 
 void convolve(std::vector<double>& sineBuffer, std::vector<double>& filter)
