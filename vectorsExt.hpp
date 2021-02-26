@@ -4,6 +4,16 @@
 #include<string>
 #include<stdexcept>
 
+/***********************************************************************
+* -- Will be used to determine concatenation Type                      *
+* -- if Rows is selected, rows of matrices will be concatenatad        *
+* -- if Columns is selected, columns of matrices will be concatenated  *
+************************************************************************/
+
+enum class ConcatenationType {
+	Rows,
+	Columns,
+};
 
 /*********************************************************************************
 *                                                                                *
@@ -65,16 +75,7 @@ void validateVector(std::vector<double>& vectorA)
 }
 
 
-/***********************************************************************
-* -- Will be used to determine concatenation Type                      *
-* -- if Rows is selected, rows of matrices will be concatenatad        *
-* -- if Columns is selected, columns of matrices will be concatenated  *
-************************************************************************/
 
-enum class ConcatenationType {
-	Rows,
-	Columns,
-};
 
 
 /*******************************************************
