@@ -14,43 +14,45 @@
 
 void validateMatrix(const std::vector<std::vector<double>>& matrixA)
 {
-
-    if(matrixA.empty())
+    try
     {
-        std::cout << "EMPTY MATRIX!!!" << std::endl;
-        throw std::invalid_argument("EMPTY MATRIX!!!");
-    }
-    else if(matrixA[0].empty())
-    {
-        std::cout << "EMPTY VECTOR AT 0 INDEX" << std::endl;
-        throw std::invalid_argument("EMPTY VECTOR AT 0 INDEX");
-    }
-    else
-    {
-        //MAKE SURE all vectors of matrix are SAME SIZE!!!
-        std::size_t shapeA = matrixA.size(); //if the above if-statements has passed and we're here, matrix.size() and matrix[0].size() wil not be undefined
-        std::size_t currentVectorLen = matrixA[0].size(); 
-        std::size_t prevVecLen = currentVectorLen; //by keep trakcing of previous vector size it is possible to throw exception what shapes have been conflicted
-        std::size_t shapeB = 0;//it is 0 until it is validated
-        for(std::size_t i = 0; i < shapeA; i++)
+        if(matrixA.empty())
         {
-            if(matrixA[i].empty())
+            throw std::invalid_argument("EMPTY MATRIX!!!");
+        }
+        else if(matrixA[0].empty())
+        {
+            throw std::invalid_argument("EMPTY VECTOR AT 0 INDEX");
+        }
+        else
+        {
+            //MAKE SURE all vectors of matrix are SAME SIZE!!!
+            std::size_t shapeA = matrixA.size(); //if the above if-statements has passed and we're here, matrix.size() and matrix[0].size() wil not be undefined
+            std::size_t currentVectorLen = matrixA[0].size(); 
+            std::size_t prevVecLen = currentVectorLen; //by keep trakcing of previous vector size it is possible to throw exception what shapes have been conflicted
+            std::size_t shapeB = 0;//it is 0 until it is validated
+            for(std::size_t i = 0; i < shapeA; i++)
             {
-                std::cout << "EMPTY VECTOR AT " << std::to_string(i) << std::endl;
-                throw std::invalid_argument{"EMPTY VECTOR AT " + std::to_string(i)};
+                if(matrixA[i].empty())
+                {
+                    throw std::invalid_argument{"EMPTY VECTOR AT " + std::to_string(i)};
+                }
+                    
+                currentVectorLen = matrixA[i].size();
+                if(currentVectorLen != prevVecLen)
+                {
+                    throw std::invalid_argument{"Vector Size MISMATCH AT INDEX (" + std::to_string(i) + ") SHAPES ->   " + std::to_string(currentVectorLen) +" & " + std::to_string(prevVecLen)};
+                }
+                prevVecLen = currentVectorLen;
             }
-                
-            currentVectorLen = matrixA[i].size();
-            if(currentVectorLen != prevVecLen)
-            {
-                std::cout << "Vector Size MISMATCH AT INDEX " << std::to_string(i) << " " << std::to_string(currentVectorLen) << " & " << std::to_string(prevVecLen) << std::endl;
-                throw std::invalid_argument{"Vector Size MISMATCH AT INDEX " + std::to_string(i) + " " + std::to_string(currentVectorLen) +" & " + std::to_string(prevVecLen)};
-            }
-            prevVecLen = currentVectorLen;
         }
     }
-}
+    catch(std::exception& e)
+    {
+        std::cout << e.what() << std::endl;
+    }
 
+}
 
 void validateVector(std::vector<double>& vectorA)
 {
