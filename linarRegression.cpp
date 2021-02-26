@@ -2,7 +2,6 @@
 #include<vector>
 #include<cmath>
 
-#define SIZE 128
 
 /*
 -- fills array with points
@@ -79,6 +78,7 @@ void feedForward(std::vector<double>& linSpacePtr,
 double squaredError(std::vector<double>& functionMatrix,
                     std::vector<double>& predictionMatrix)
 {
+    const std::size_t SIZE = 128;
     double totalError = 0.0;
     std::size_t i = functionMatrix.size();
     if(functionMatrix.size() != predictionMatrix.size()) return 0.0;
@@ -123,6 +123,7 @@ double calculateGradient(double (*squaredError)(std::vector<double>&,  std::vect
 
 int main()
 {
+    const std::size_t SIZE = 128;
     std::vector<double> linSpace(SIZE);
     std::vector<double> functionMatrix(SIZE);
     std::vector<double> predictionMatrix(SIZE);
