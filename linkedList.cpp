@@ -12,7 +12,7 @@ class LinkedList
          struct Node{
             int val = 0;
             Node* next = nullptr;
-        }*nodePtr;
+        };
 
         Node* head;
         Node* currentAddr;
