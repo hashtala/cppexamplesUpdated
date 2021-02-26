@@ -12,7 +12,7 @@ class HashedTable
 
     HashedTable()
     {
-        hashTable = new int[hashSize]; //allocates memmory for 20*4 bytes. 
+        hashTable = (int*)malloc(hashSize*sizeof(int)); //allocates memmory for 20*4 bytes. 
     }
 
     int hashKey(int key)
@@ -40,7 +40,7 @@ class HashedTable
 
     void destroyTable()
     {
-        delete[] hashTable;
+        free(hashTable);
     }
 };
 
@@ -54,7 +54,6 @@ int main()
     table.addItem(211,9);
     table.addItem(452,5);
 
-    std::cout << table.findItem(452);
-    
-    return 0;
+   
+    return 1;
 }

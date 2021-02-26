@@ -8,15 +8,15 @@
 
 class LinkedList
 {
-    private:
-        typedef struct node{
+    private:  
+         struct Node{
             int val = 0;
-            node* next = nullptr;
+            Node* next = nullptr;
         }*nodePtr;
 
-        node* head;
-        node* currentAddr;
-        node* tempNode;
+        Node* head;
+        Node* currentAddr;
+        Node* tempNode;
 
 
     public:
@@ -40,7 +40,7 @@ class LinkedList
     void addNodeItem(int value)
     {   
 
-       nodePtr newNode = new node;
+       Node* newNode = new Node;
        newNode->next = nullptr;
        newNode->val = value;
        if(head != nullptr)
@@ -63,7 +63,7 @@ class LinkedList
 
     void deleteNode(int value)
     {
-        nodePtr deltPtr = nullptr; //this will point to address which we want to remove from the linked list
+        Node* deltPtr = nullptr; //this will point to address which we want to remove from the linked list
         currentAddr = head;
         tempNode = head;
         while(currentAddr != nullptr)
@@ -122,9 +122,6 @@ class LinkedList
 
 
 };
-
-
-
 
 
 

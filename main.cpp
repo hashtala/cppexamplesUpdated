@@ -46,12 +46,15 @@ int main()
     tempMatrix[0] = std::vector<double> {3,4};
     tempMatrix[1] = std::vector<double> {1,0};
 
-    std::vector<std::vector<double>> a = concatenateMatrices(slicedMatrix, tempMatrix, 1);
+    ConcatenationType rowsConcat = ConcatenationType::Rows;
+    ConcatenationType colsConcat = ConcatenationType::Columns;
+
+    std::vector<std::vector<double>> a = concatenateMatrices(slicedMatrix, tempMatrix, colsConcat);
     std::cout << "sliced and then concatenad matrix with columns" << std::endl;
     printMatrixContent(a); 
     std::cout << " "<< std::endl;
     
-    a = concatenateMatrices(slicedMatrix, tempMatrix, 0);
+    a = concatenateMatrices(slicedMatrix, tempMatrix, rowsConcat);
     std::cout << "sliced and then concatenad matrix with rows" << std::endl;
     printMatrixContent(a); 
     std::cout << " "<< std::endl;
@@ -71,5 +74,5 @@ int main()
     std::cout << "Convolution Output (should read 8s because 2+2+2+2 in each window)" << std::endl;  // 
     printMatrixContent(convolvedMatrix);
 
-    return 1;
+    return 0;
 }

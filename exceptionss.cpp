@@ -17,16 +17,15 @@ int main()
 
     //int a = sizeof(matrixA);
     //std::cout << a;
-    
-    /*
     matrixA[0] = std::vector<double> {1,2};
     matrixA[1] = std::vector<double> {1,2,3};
 
     matrixB[0] = std::vector<double> {1,2};
     matrixB[1] = std::vector<double> {1,2};
-    */
     
-    std::vector<std::vector<double>> matrixC = concatenateMatrices(matrixA, matrixB, 0);
+    ConcatenationType conType = ConcatenationType::Rows;
+
+    std::vector<std::vector<double>> matrixC = concatenateMatrices(matrixA, matrixB, conType);
 
     return 0;
 }

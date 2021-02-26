@@ -49,10 +49,11 @@ void validateMatrix(const std::vector<std::vector<double>>& matrixA)
     }
     catch(std::exception& e)
     {
-        std::cout << e.what() << std::endl;
+        std::cerr << e.what() << std::endl;
     }
 
 }
+
 
 void validateVector(std::vector<double>& vectorA)
 {
@@ -62,6 +63,19 @@ void validateVector(std::vector<double>& vectorA)
         throw std::invalid_argument("EMPTY VECTOR!!!");
     }
 }
+
+
+/***********************************************************************
+* -- Will be used to determine concatenation Type                      *
+* -- if Rows is selected, rows of matrices will be concatenatad        *
+* -- if Columns is selected, columns of matrices will be concatenated  *
+************************************************************************/
+
+enum class ConcatenationType {
+	Rows,
+	Columns,
+};
+
 
 /*******************************************************
 * -- matrix multiplication function                    *
@@ -79,11 +93,19 @@ void martixMult(const std::vector<std::vector<double>>& matrixA,
     validateMatrix(matrixA);
     validateMatrix(matrixB);
 
-    if(matrixA[0].size() != matrixB.size())
+    try
     {
-        std::cout << "INNER SHAPES DO NOT MATCH  " << " " << std::to_string(matrixA[0].size()) << " & " << std::to_string(matrixB.size()) << std::endl;
-        throw std::invalid_argument{"Vector Size MISMATCH AT INDEX " + std::to_string(matrixA[0].size()) +" & " + std::to_string(matrixB.size())};
+        if(matrixA[0].size() != matrixB.size())
+        {
+            throw std::invalid_argument{"SHAPE MISMATCH ->  " + std::to_string(matrixA[0].size()) +" & " + std::to_string(matrixB.size())};
+        }
     }
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
+    }
+    
+
    
 
     //resizing output matrix buffer
@@ -97,7 +119,6 @@ void martixMult(const std::vector<std::vector<double>>& matrixA,
     double temp = 0.0;
     for(std::size_t k = 0; k < matrixB[0].size(); k++)
     {
-        
         for(std::size_t i = 0; i < matrixA.size(); i++)
         {
             temp = 0;
@@ -119,18 +140,17 @@ void martixMult(const std::vector<std::vector<double>>& matrixA,
 **********************************************************/
 void printMatrixContent(const std::vector<std::vector<double>>& matrixA)
 {
+   //validateMatrix(matrixA);
    for(std::size_t i = 0; i< matrixA.size(); i++)
    {
-       for(std::size_t j = 0; j < matrixA[j].size(); j++)
+       for(std::size_t j = 0; j < matrixA[i].size(); j++)
        {
-            std::cout << matrixA.at(i).at(j);
+            std::cout << matrixA.at(i).at(j);  //this wil throw error anyway if matrix is out of bounds so...
             std::cout << " ";
-
        }
         std::cout << " " << std::endl;
    }
 }
-
 
 
 /***********************************************
@@ -141,12 +161,11 @@ void printMatrixContent(const std::vector<std::vector<double>>& matrixA)
 double matrixSum(const std::vector<std::vector<double>> &matrixA)
 {
     validateMatrix(matrixA);
-    std::size_t a = matrixA.size();
-    std::size_t b = 0;
     double sum = 0.0;
-
+    std::size_t a = matrixA.size();
     for(std::size_t i = 0; i < a; i++)
     {
+        std::size_t b = 0;
         b = matrixA[i].size();
         for(std::size_t j = 0; j < b; j++)
         {
@@ -199,9 +218,7 @@ std::vector<std::vector<double>> conv2d(const std::vector<std::vector<double>> m
     std::size_t shapeA = a - m + 1;
     std::size_t shapeB = b - n+ 1;
     std::vector<std::vector<double>> tempVector(shapeA, std::vector<double>(shapeB));
-
     double tempSum = 0.0;
-
     for(std::size_t l = 0; l < shapeA ; l++)
     {
         for(std::size_t k = 0; k < shapeB; k++)
@@ -227,6 +244,7 @@ std::vector<std::vector<double>> conv2d(const std::vector<std::vector<double>> m
 * -- note: order of inputs yeld to different output               *
 * -- Concat(vectorA, vectorB)  IS NOT Concat(vectorB, vectorA)    *
 *******************************************************************/
+
 std::vector<double> concatVectors(std::vector<double>& vectorA, std::vector<double>& vectorB)
 {
 
@@ -289,13 +307,16 @@ std::vector<double> sliceVector(std::vector<double> vectorA, std::size_t start, 
 * -- a is start index on rows and b is end index on rows         *
 * -- m is start index on columns and n is end index on column    *
 ******************************************************************/
+
 std::vector<std::vector<double>> sliceMatrix(std::vector<std::vector<double>>& matrixA,
                                              std::size_t a, 
                                              std::size_t b,
                                              std::size_t m, 
                                              std::size_t n)
 {
+
     validateMatrix(matrixA);
+
     if(a > b || m > n)
     {
         std::cout << "INCORRECT slice interval!!!" << std::endl;
@@ -328,31 +349,40 @@ std::vector<std::vector<double>> sliceMatrix(std::vector<std::vector<double>>& m
 *-- set flag = 1 to concatenate rows of matrice             *
 *-- set flag = 0 to conatenate columns ofmatrices           *
 *************************************************************/
+
 std::vector<std::vector<double>> concatenateMatrices(std::vector<std::vector<double>>& matrixA,
                                                      std::vector<std::vector<double>>& matrixB,
-                                                     uint8_t flag)  //flag 1 = row concatenation
+                                                     ConcatenationType flag)  
 {
 
 
     validateMatrix(matrixA);
     validateMatrix(matrixB);
 
-    const std::size_t a = matrixA.size();
-    const std::size_t b = matrixA[0].size();
-    const std::size_t m = matrixB.size();
-    const std::size_t n = matrixB[0].size();
-
-    const std::size_t rowLen = a + m;
-    const std::size_t colLen = b + n;
 
 
-    if(flag == 0)
+    if(flag == ConcatenationType::Rows)
     {
-        if(a != m)
+        const std::size_t a = matrixA.size();
+        const std::size_t m = matrixB.size();
+        try
         {
-            std::cout << "SHAPE Mistmatch, did you mean flag = 1?" << std::endl;
-            return std::vector<std::vector<double>>{{0}};
+            if(a != m)
+            {
+                throw std::invalid_argument("SHAPE Mistmatch, did you mean flag = 1?");
+            }
+
         }
+        catch(std::exception& e)
+        {
+            std::cerr<< e.what() << std::endl;
+        }
+
+        const std::size_t b = matrixA[0].size();
+        const std::size_t n = matrixB[0].size();
+
+        const std::size_t rowLen = a + m;
+        const std::size_t colLen = b + n;
 
         std::vector<std::vector<double>> tempArray(a, std::vector<double>(colLen));
 
@@ -364,14 +394,29 @@ std::vector<std::vector<double>> concatenateMatrices(std::vector<std::vector<dou
         return tempArray;
 
     }
-    else
+    else if(flag == ConcatenationType::Columns)
     {
-        if(b != n)
+        const std::size_t b = matrixA[0].size();
+        const std::size_t n = matrixB[0].size();
+
+        try
         {
-            std::cout << "SHAPE Mistmatch, did you mean flag = 0?"<< std::endl;
-            return std::vector<std::vector<double>>{{0}};
+            if(b != n)
+            {
+                throw std::invalid_argument("SHAPE Mistmatch, did you mean flag = 0?");
+            }
+
         }
-      
+        catch(std::exception& e)
+        {
+            std::cerr<< e.what() << std::endl;
+        }
+
+        const std::size_t a = matrixA.size();
+        const std::size_t m = matrixB.size();
+
+        const std::size_t rowLen = a + m;
+        const std::size_t colLen = b + n;      
         std::size_t indexVar = 0;
         std::vector<std::vector<double>> tempArray(colLen, std::vector<double>(b)); //could be n as well
     
@@ -387,6 +432,10 @@ std::vector<std::vector<double>> concatenateMatrices(std::vector<std::vector<dou
         }       
 
         return tempArray;
+    }
+    else
+    {
+        std::cerr << "INVALID CONCATENATION TYPE\n";
     }
 
 
